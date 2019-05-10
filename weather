@@ -36,6 +36,7 @@ then
 		echo ${temp}°F
 		echo ${descrp}
 	fi
+
 else
 	
 	echo "Current Temperature in ${city}, ${country}"
@@ -50,9 +51,8 @@ else
 		echo ${temp}°C
 		echo ${descrp}
 
-	else
-		if [[ ${units} == "-f" ]];
-		then
+	elif [[ ${units} == "-f" ]];
+	then
 			units=imperial
 			weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${q}&units=${units}&mode=${mode}&APPID=${APPID}"
 			temp=$(curl -s ${weatherURL} | jq '.main.temp')
@@ -60,6 +60,6 @@ else
 		
 			echo ${temp}°F
 			echo ${descrp}
-		fi
+
 	fi
 fi
