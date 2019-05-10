@@ -1,0 +1,65 @@
+#!/bin/bash
+
+APPID=24358ee068d1f33b66181473b2f04159
+q=$1
+mode=json
+units=$2
+
+if [[ ${q} == "-h"  ]];
+then
+	
+	myIP=$(curl -s "https://ipinfo.io/ip")
+	geoInfo=$(curl -s "https://ipinfo.io/${myIP}/geo")
+	city=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.city' | tr -d '"')
+	country=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.country' | tr -d '"')
+	q="${city},${country}"
+	
+	echo "Current Temperature in ${city}, ${country}"
+
+	if [[ ${units} == "-c" ]];
+	then
+		units=metric
+		weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${q}&units=${units}&mode=${mode}&APPID=${APPID}"
+		temp=$(curl -s ${weatherURL} | jq '.main.temp')
+		descrp=$(curl -s ${weatherURL} | jq '.weather[0].description' | tr -d '"')
+		
+		echo ${temp}°C
+		echo ${descrp}
+
+	elif [[ ${units} == "-f" ]];
+	then
+		units=imperial
+		weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${q}&units=${units}&mode=${mode}&APPID=${APPID}"
+		temp=$(curl -s ${weatherURL} | jq '.main.temp')
+		descrp=$(curl -s ${weatherURL} | jq '.weather[0].description' | tr -d '"')
+		
+		echo ${temp}°F
+		echo ${descrp}
+	fi
+else
+	
+	echo "Current Temperature in ${city}, ${country}"
+
+	if [[ ${units} == "-c" ]];
+	then
+		units=metric
+		weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${q}&units=${units}&mode=${mode}&APPID=${APPID}"
+		temp=$(curl -s ${weatherURL} | jq '.main.temp')
+		descrp=$(curl -s ${weatherURL} | jq '.weather[0].description' | tr -d '"')
+		
+		echo ${temp}°C
+		echo ${descrp}
+
+	else
+		if [[ ${units} == "-f" ]];
+		then
+			units=imperial
+			weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${q}&units=${units}&mode=${mode}&APPID=${APPID}"
+			temp=$(curl -s ${weatherURL} | jq '.main.temp')
+			descrp=$(curl -s ${weatherURL} | jq '.weather[0].description' | tr -d '"')
+		
+			echo ${temp}°F
+			echo ${descrp}
+		fi
+	fi
+fi
