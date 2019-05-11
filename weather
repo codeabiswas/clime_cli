@@ -11,9 +11,11 @@ then
 	
 	myIP=$(curl -s "https://ipinfo.io/ip")
 	geoInfo=$(curl -s "https://ipinfo.io/${myIP}/geo")
-	city=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.city' | tr -d '"')
-	country=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.country' | tr -d '"')
-	zip=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.postal' | tr -d '"')
+	
+	city=$(jq '.city' <<< ${geoInfo} | tr -d '"')
+	country=$(jq '.country' <<< ${geoInfo} | tr -d '"')
+	zip=$(jq '.postal' <<< ${geoInfo} | tr -d '"')
+	
 	q="${city},${country}"
 		
 	echo "Current Temperature in ${city}, ${country}"
