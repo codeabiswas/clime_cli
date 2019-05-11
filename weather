@@ -93,6 +93,7 @@ then
 	geoInfo=$(curl -s "https://ipinfo.io/${myIP}/geo")
 	city=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.city' | tr -d '"')
 	country=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.country' | tr -d '"')
+	zip=$(curl -s "https://ipinfo.io/${myIP}/geo" | jq '.postal' | tr -d '"')
 	q="${city},${country}"
 	
 	echo "Current Temperature in ${city}, ${country}"
@@ -102,13 +103,12 @@ then
 		units=metric
 		weatherURL="https://api.openweathermap.org/data/2.5/forecast?zip=${zip},${country}&units=${units}&mode=${mode}&APPID=${APPID}"
 		
-		echo $(curl ${weatherURL} | jq '.')
-		
-		temp=$(curl -s ${weatherURL} | jq '.main.temp')
-		descrp=$(curl -s ${weatherURL} | jq '.weather[0].description' | tr -d '"')
-		
-		echo ${temp}°C
-		echo ${descrp}
+		curl -s ${weatherURL} | jq -c '.list[]' | while read info; do
+			echo ${info} | jq '.dt_txt' | tr -d '"'
+			echo ${info} | jq '.main.temp' 
+			echo ${info} | jq '.weather[0].description' | tr -d '"'
+			echo
+		done
 
 	elif [[ ${units} == "-f" ]];
 	then
