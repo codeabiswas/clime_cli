@@ -9,7 +9,7 @@ units=$2
 forecast=$3
 
 # This bit of logic is to check if the user has the "origin" and "now" flags set
-if [ ${q} == "-o"  ] && [ ${forecast} == "-n" ];
+if [[ ${q} == "-o"  ]] && [[ ${forecast} == "-n" ]];
 then
 	
 	myIP=$(curl -s "https://ipinfo.io/ip")
@@ -35,7 +35,8 @@ then
 		weatherURL="https://api.openweathermap.org/data/2.5/weather?zip=${zip},${country}&units=${units}&mode=${mode}&APPID=${APPID}"
 		ending="°F"
 	
-	else
+	elif [[ ${units} == "" ]];
+	then
 				
 		weatherURL="https://api.openweathermap.org/data/2.5/weather?zip=${zip},${country}&mode=${mode}&APPID=${APPID}"
 		ending=" K"	
@@ -75,7 +76,7 @@ then
 	flag=1
 
 # This bit of logic is to check if the user has the "origin" flag set and the "5-day/3-hour forecast" flag set			
-elif [ ${q} == "-o"  ] && [ ${forecast} == "-m" ];
+elif [[ ${q} == "-o"  ]] && [[ ${forecast} == "-m" ]];
 then
 	
 	myIP=$(curl -s "https://ipinfo.io/ip")
@@ -140,6 +141,7 @@ then
 
 fi
 
+# Flag check
 if [[ ${flag} -eq 0 ]];
 then
 
@@ -157,16 +159,29 @@ then
 
 elif [[ ${flag} -eq 2 ]];
 then
-
+	
+	mainDateTime=$(curl -s ${weatherURL} | jq '.list[0].dt_txt' | tr -d '"')
+	mainDateTime=${mainDateTime:0:10}
+	echo ----------${mainDateTime}----------
+	echo
+	
+	#12:19 for time
 	curl -s ${weatherURL} | jq -c '.list[]' | while read forecastInfo; do
 		dateTime=$(jq '.dt_txt' <<< ${forecastInfo} | tr -d '"')
+		
+		if [[ ${mainDateTime} != ${dateTime:0:10} ]]; 
+		then
+			mainDateTime=${dateTime:0:10}
+			echo ----------${mainDateTime}----------
+			echo
+		fi
+			
 		temp=$(jq '.main.temp' <<< ${forecastInfo})
 		descrp=$(jq '.weather[0].description' <<< ${forecastInfo} | tr -d '"')
 	
-		echo ${dateTime}
-		echo ${temp}${ending}
-		echo ${descrp}
+		echo "${dateTime:11:19}    |	${temp}${ending} 	|	${descrp}"
 		echo
+
 	done
 
 fi	
