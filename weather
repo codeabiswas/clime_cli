@@ -19,7 +19,7 @@ then
 	country=$(jq '.country' <<< ${geoInfo} | tr -d '"')
 	zip=$(jq '.postal' <<< ${geoInfo} | tr -d '"')
 		
-	echo "Current Temperature in ${city}, ${country}"
+	echo "Currently in ${city}, ${country}"
 
 	if [[ ${units} == "-c" ]];
 	then
@@ -50,7 +50,7 @@ then
 elif [[ ${forecast} == "-n" ]];
 then
 	
-	echo "Current Temperature in ${q}"
+	echo "Currently in ${q}"
 
 	if [[ ${units} == "-c" ]];
 	then
@@ -86,7 +86,7 @@ then
 	country=$(jq '.country' <<< ${geoInfo} | tr -d '"')
 	zip=$(jq '.postal' <<< ${geoInfo} | tr -d '"')
 	
-	echo "Current Temperature in ${city}, ${country}"
+	echo "Forecast in ${city}, ${country}"
 
 	if [[ ${units} == "-c" ]];
 	then
@@ -115,7 +115,7 @@ then
 elif [[ ${forecast} == "-m" ]];
 then
 	
-	echo "Current Temperature in ${q}"
+	echo "Forecast in ${q}"
 
 	if [[ ${units} == "-c" ]];
 	then
@@ -151,11 +151,11 @@ elif [[ ${flag} -eq 1 ]];
 then
 
 	weatherInfo=$(curl -s ${weatherURL})
+
 	temp=$(jq '.main.temp' <<< ${weatherInfo})
 	descrp=$(jq '.weather[0].description' <<< ${weatherInfo} | tr -d '"')
-		
-	echo ${temp}${ending}
-	echo ${descrp}
+	
+	echo "${temp}${ending} | ${descrp}"
 
 elif [[ ${flag} -eq 2 ]];
 then
@@ -179,7 +179,7 @@ then
 		temp=$(jq '.main.temp' <<< ${forecastInfo})
 		descrp=$(jq '.weather[0].description' <<< ${forecastInfo} | tr -d '"')
 	
-		echo "${dateTime:11:19}    |	${temp}${ending} 	|	${descrp}"
+		echo "${dateTime:11:19} | ${temp}${ending} | ${descrp}"
 		echo
 
 	done
