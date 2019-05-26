@@ -10,7 +10,7 @@
 clime [where] [unit] [type]
 
 [where] arguments:
--o, --origin			        : Current location
+-o, --origin			            : Current location
 City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 
 [unit] arguments:
@@ -20,7 +20,7 @@ City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 
 [type] arguments:
 -n, --now			                : Current weather
--m, --multiple			        : Weather forecast \in 3-hour intervals \for 5-days
+-m, --multiple			        : Weather forecast in 3-hour intervals for 5-days
 ```
 
 **Note:** All 3 arguments must be completed for a successful result.
@@ -58,7 +58,7 @@ Get simple weather details using the command-line
 clime [where] [unit] [type]
 
 [where] arguments:
--o, --origin			        : Current location
+-o, --origin			            : Current location
 City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 
 [unit] arguments:
@@ -68,7 +68,7 @@ City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 
 [type] arguments:
 -n, --now			                : Current weather
--m, --multiple			        : Weather forecast \in 3-hour intervals \for 5-days
+-m, --multiple			        : Weather forecast in 3-hour intervals for 5-days
 ```
 If the above output is your result, then ```clime``` is setup properly
 
