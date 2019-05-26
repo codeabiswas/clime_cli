@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# clime: Get simple weather details using the command-line
+
+# Author: Andrei Biswas
+# GitHub: https://www.github.com/codeabiswas
+# LinkedIn: https://www.linkedin.com/in/andreibiswas/
+# Email: axb6972@rit.edu
+
+# Created On: Thursday, May 9, 2019
+# Last Modified On: Sunday, May 25, 2019
+
 # Check that the right number of arguments is provided
 # If there are not 3 arguments, or if any of the arguments is -h/--help, then print out the --help command
 if [[ $# != 3 ]] || [[ $* == *"-h"* ]] || [[ $* == *"--help"* ]];
