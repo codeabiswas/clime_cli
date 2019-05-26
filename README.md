@@ -3,13 +3,12 @@
 
 ---
 ## Usage
-
 ```shell
 clime [where] [unit] [type]
 
 [where] arguments:
--o, --origin			            : Current location
-City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
+-o, --origin		                : Current location
+City,2-digit Country Code               : Example - Boston,US (notice no spaces)
 
 [unit] arguments:
 -c, --celsius			        : Degrees Celsius (Metric)
@@ -17,35 +16,36 @@ City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 -k, --kelvin			        : Kelvin (SI)
 
 [type] arguments:
--n, --now			                : Current weather
+-n, --now			        : Current weather
 -m, --multiple			        : Weather forecast in 3-hour intervals for 5-days
 ```
 
 **Note:** All 3 arguments must be filled in for a successful result.
 
-###Examples:
+### Examples
+_Input:_
 ```shell
 clime -o -c -n
 ```
-_Output_:
+_Output:_
 ```shell
 Currently in Cornelius, US
 29.7°C | clear sky
 ```
-----
+_Input:_
 ```shell
 clime Delhi,IN -c -n 
 ```
-_Output_:
+_Output:_
 ```shell
 Currently in Delhi,IN
 37.1°C | haze
 ```
----
+_Input:_
 ```shell
 clime -o -f -m
 ```
-_Output_:
+_Output:_
 ```shell
 Forecast in Cornelius, US
 ----------2019-05-26----------
@@ -94,11 +94,11 @@ Forecast in Cornelius, US
 
 ... and so on.
 ```
----
+_Input_
 ```shell
 clime Boston,US -k -m 
 ```
-_Output_:
+_Output:_
 ```shell
 Forecast in Boston,US
 ----------2019-05-26----------
@@ -154,7 +154,7 @@ Forecast in Boston,US
 **Note:** _This has only been tried and tested on Debian and MacOS. This installation guide may not work on other operating systems._
 
 ### Prerequisites
-* Install [jq](https://stedolan.github.io/jq/download/)
+Install [jq](https://stedolan.github.io/jq/download/)
 
 1. Clone this repository.
 2. Unless you have one already, create a folder in your root directory called ```bin/```.
@@ -178,17 +178,20 @@ cd ~/bin/
 chmod +x clime
 ```
 6. Type ```clime``` and hit the ```Return``` key to see the result.
+
+_Input_:
 ```script
 clime
 ```
+_Output:_
 ```script
 Get simple weather details using the command-line and on your command-line.
 
 clime [where] [unit] [type]
 
 [where] arguments:
--o, --origin			            : Current location
-City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
+-o, --origin		                : Current location
+City,2-digit Country Code               : Example - Boston,US (notice no spaces)
 
 [unit] arguments:
 -c, --celsius			        : Degrees Celsius (Metric)
@@ -196,10 +199,10 @@ City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 -k, --kelvin			        : Kelvin (SI)
 
 [type] arguments:
--n, --now			                : Current weather
+-n, --now			        : Current weather
 -m, --multiple			        : Weather forecast in 3-hour intervals for 5-days
 ```
-If the above output is your result, then ```clime``` is setup properly
+If the above output is your result, then ```clime``` is setup properly.
 
 ---
 ## Acknowledgements
@@ -212,4 +215,4 @@ If the above output is your result, then ```clime``` is setup properly
 
 ---
 ## License
-clime is under the [MIT License](https://github.com/codeabiswas/clime_cli/blob/develop/LICENSE).
+```clime``` is under the [MIT License](https://github.com/codeabiswas/clime_cli/blob/develop/LICENSE).
