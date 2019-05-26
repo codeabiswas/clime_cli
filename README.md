@@ -5,6 +5,14 @@ Clime is a simple script that will fetch weather information and display it to y
 
 ---
 
+## Usage
+
+```shell
+clime [where] [unit] [type]
+```
+
+---
+
 ## Contributors
 - Andrei Biswas <axb6972@rit.edu>
 

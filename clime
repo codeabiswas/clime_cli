@@ -10,6 +10,9 @@
 # Created On: Thursday, May 9, 2019
 # Last Modified On: Sunday, May 25, 2019
 
+# As long as actual weather data is unable to be retrieved, set the flag as an error 
+flag=3
+
 # Check that the right number of arguments is provided
 # If there are not 3 arguments, or if any of the arguments is -h/--help, then print out the --help command
 if [[ $# != 3 ]] || [[ $* == *"-h"* ]] || [[ $* == *"--help"* ]];
@@ -22,8 +25,6 @@ fi
 APPID=24358ee068d1f33b66181473b2f04159
 # The format the API should return all information in
 mode=json
-# As long as actual weather data is unable to be retrieved, set the flag as an error 
-flag=3
 
 # Get the first argument [where]
 where=$1
