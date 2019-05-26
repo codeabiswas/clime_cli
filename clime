@@ -221,6 +221,8 @@ fi
 # If the --help has been called for
 if [[ ${flag} -eq 0 ]];
 then
+	echo "clime: Get simple weather details using the command-line"
+	echo
 	echo "usage: clime [where] [unit] [type]"
 	echo ""
 	echo "Options and arguments:"
@@ -237,7 +239,9 @@ then
 	echo "[type] arguments:"
 	echo "-n, --now			: Current weather"
 	echo "-m, --multiple			: Weather forecast in 3-hour intervals for 5-days"	
-	
+	echo ""
+	echo "Any of the arguments can be -h or --help. This will show the above information on how to use clime."
+	echo "The arguments can be left blank too to get the same result."
 	# Exit the script	
 	exit 0
 
