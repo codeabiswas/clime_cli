@@ -221,7 +221,7 @@ fi
 # If the --help has been called for
 if [[ ${flag} -eq 0 ]];
 then
-	echo "clime: Get simple weather details using the command-line"
+	echo "Get simple weather details using the command-line"
 	echo
 	echo "usage: clime [where] [unit] [type]"
 	echo ""
