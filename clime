@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# clime: Get simple weather details using the command-line
+# clime: Get simple weather details using the command-line, thanks to OpenWeatherMap (https://openweathermap.org).
 
 # Author: Andrei Biswas
 # GitHub: https://www.github.com/codeabiswas
@@ -221,7 +221,7 @@ fi
 # If the --help has been called for
 if [[ ${flag} -eq 0 ]];
 then
-	echo "Get simple weather details using the command-line"
+	echo "Get simple weather details using the command-line and on your command-line."
 	echo
 	echo "usage: clime [where] [unit] [type]"
 	echo ""
@@ -234,7 +234,7 @@ then
 	echo "[unit] arguments:"
 	echo "-c, --celsius			: Degrees Celsius (Metric)"
 	echo "-f, --fahrenheit		: Degrees Fahrenheit (Imperial)"
-	echo "-k, --kelvin			: Degrees Kelvin (SI)"
+	echo "-k, --kelvin			: Kelvin (SI)"
 	echo ""
 	echo "[type] arguments:"
 	echo "-n, --now			: Current weather"
