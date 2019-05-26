@@ -234,13 +234,27 @@ elif [[ ${flag} -eq 1 ]];
 then
 	# Fetch the weather information
 	weatherInfo=$(curl -s ${weatherURL})
+
+	# Format the returned code and store 
+	returnCode=$(jq '.cod' <<< ${weatherInfo} | tr -d '"')
 	
-	# Format the temperature data and store
-	temp=$(jq '.main.temp' <<< ${weatherInfo})
-	# Format the weather description and store
-	descrp=$(jq '.weather[0].description' <<< ${weatherInfo} | tr -d '"')
+	# If the return code is 404 (Not Found)
+	if [[ ${returnCode} -eq 404 ]];
+	then
+		# Get the error message returned in the GET request
+		message=$(jq '.message' <<< ${weatherInfo} | tr -d '"')
+		echo "Error: ${message}"
+
+	else
+
+		# Format the temperature data and store
+		temp=$(jq '.main.temp' <<< ${weatherInfo})
+		# Format the weather description and store
+		descrp=$(jq '.weather[0].description' <<< ${weatherInfo} | tr -d '"')
 	
-	echo "${temp}${ending} | ${descrp}"
+		echo "${temp}${ending} | ${descrp}"
+
+	fi
 
 	# Exit the script
 	exit 0
@@ -249,37 +263,58 @@ then
 elif [[ ${flag} -eq 2 ]];
 then
 	
-	# Fetch the date and time information and store it as the "current" date time
-	currDateTime=$(curl -s ${weatherURL} | jq '.list[0].dt_txt' | tr -d '"')
-	# Format the string to just get the date
-	currDateTime=${currDateTime:0:10}
-	echo ----------${currDateTime}----------
-	echo
-	
-	# Fetch the weather data and iterate through all the weather information
-	curl -s ${weatherURL} | jq -c '.list[]' | while read forecastInfo; do
-		# Fetch the date and time information
-		dateTime=$(jq '.dt_txt' <<< ${forecastInfo} | tr -d '"')
-		
-		# If the date does not match with the "current" date
-		if [[ ${currDateTime} != ${dateTime:0:10} ]]; 
-		then
-			# Replace as the new "current" date
-			currDateTime=${dateTime:0:10}
-			# Create a new row with that date
-			echo ----------${currDateTime}----------
-			echo
-		fi
-		
-		# Formate the temperature data and store
-		temp=$(jq '.main.temp' <<< ${forecastInfo})
-		# Formate the weather description and store
-		descrp=$(jq '.weather[0].description' <<< ${forecastInfo} | tr -d '"')
-		
-		echo "${dateTime:11:19} | ${temp}${ending} | ${descrp}"
-		echo
+	# Fetch the forecast information
+	forecastStuff=$(curl -s ${weatherURL})
 
-	done
+	# Format the returned code and store 
+	returnCode=$(jq '.cod' <<< ${forecastStuff} | tr -d '"')
+	
+	# If the return code is 404 (Not Found)
+	if [[ ${returnCode} -eq 404 ]];
+	then
+		# Get the error message returned in the GET request
+		message=$(jq '.message' <<< ${forecastStuff} | tr -d '"')
+		echo "Error: ${message}"
+
+	else
+
+		# Fetch the date and time information and store it as the "current" date time
+		currDateTime=$(jq '.list[0].dt_txt' <<< ${forecastStuff} | tr -d '"')
+		# Format the string to just get the date
+		currDateTime=${currDateTime:0:10}
+		echo ----------${currDateTime}----------
+		echo
+		
+		# Fetch the forecast list from the forecast information and store it 
+		forecastList=$(jq -c '.list[]' <<< ${forecastStuff})
+		
+		# Fetch the weather data and iterate through all the forecast list objects
+		while read forecastInfo; do
+			#echo ${forecastInfo}
+			# Fetch the date and time information
+			dateTime=$(jq '.dt_txt' <<< ${forecastInfo} | tr -d '"')
+			
+			# If the date does not match with the "current" date
+			if [[ ${currDateTime} != ${dateTime:0:10} ]]; 
+			then
+				# Replace as the new "current" date
+				currDateTime=${dateTime:0:10}
+				# Create a new row with that date
+				echo ----------${currDateTime}----------
+				echo
+			fi
+			
+			# Formate the temperature data and store
+			temp=$(jq '.main.temp' <<< ${forecastInfo})
+			# Formate the weather description and store
+			descrp=$(jq '.weather[0].description' <<< ${forecastInfo} | tr -d '"')
+			
+			echo "${dateTime:11:19} | ${temp}${ending} | ${descrp}"
+			echo
+
+		done <<< ${forecastList}
+
+	fi
 
 	# Exit the script
 	exit 0
