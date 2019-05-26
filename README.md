@@ -10,8 +10,8 @@
 clime [where] [unit] [type]
 
 [where] arguments:
--o, --origin			        : Current location
-City,2-digit Country Code	: Example - Boston,US (notice no spaces)
+-o, --origin			            : Current location
+City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 
 [unit] arguments:
 -c, --celsius			        : Degrees Celsius (Metric)
@@ -19,8 +19,8 @@ City,2-digit Country Code	: Example - Boston,US (notice no spaces)
 -k, --kelvin			        : Degrees Kelvin (SI)
 
 [type] arguments:
--n, --now			            : Current weather
--m, --multiple			    : Weather forecast \\in 3-hour intervals \\for 5-days
+-n, --now			                : Current weather
+-m, --multiple			        : Weather forecast \\in 3-hour intervals \\for 5-days
 ```
 
 **Note:** All 3 arguments must be completed for a successful result.
@@ -48,25 +48,27 @@ cp clime ~/bin/
 cd ~/bin/
 chmod +x clime
 ```
-5. It should work now! Type ```clime``` and hit the Return key to see the result.
+5. Type ```clime``` and hit the Return key to see the result.
 ```script
 clime
-
+```
+```script
 clime [where] [unit] [type]
 
 [where] arguments:
--o, --origin			    : Current location
-City,2-digit Country Code	: Example - Boston,US (notice no spaces)
+-o, --origin			            : Current location
+City,2-digit Country Code	    : Example - Boston,US (notice no spaces)
 
 [unit] arguments:
--c, --celsius			    : Degrees Celsius (Metric)
--f, --fahrenheit		    : Degrees Fahrenheit (Imperial)
--k, --kelvin			    : Degrees Kelvin (SI)
+-c, --celsius			        : Degrees Celsius (Metric)
+-f, --fahrenheit		        : Degrees Fahrenheit (Imperial)
+-k, --kelvin			        : Degrees Kelvin (SI)
 
 [type] arguments:
--n, --now			        : Current weather
--m, --multiple			    : Weather forecast \\in 3-hour intervals \\for 5-days
+-n, --now			                : Current weather
+-m, --multiple			        : Weather forecast \\in 3-hour intervals \\for 5-days
 ```
+If the above output is your result, the ```clime``` is setup properly
 
 ---
 ## Contributors
