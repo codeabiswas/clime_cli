@@ -11,4 +11,4 @@ Clime is a simple script that will fetch weather information and display it to y
 ---
 
 ## License
-clime is under the MIT License.
+clime is under the [MIT License](https://github.com/codeabiswas/clime_cli/blob/develop/LICENSE).
