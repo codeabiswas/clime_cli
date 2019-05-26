@@ -1,0 +1,348 @@
+#!/bin/bash
+
+# clime: Get simple weather details using the command-line
+
+# Author: Andrei Biswas
+# GitHub: https://www.github.com/codeabiswas
+# LinkedIn: https://www.linkedin.com/in/andreibiswas/
+# Website: codeabiswas.github.io
+# Email: axb6972@rit.edu
+
+# Created On: Thursday, May 9, 2019
+# Last Modified On: Sunday, May 25, 2019
+
+# As long as actual weather data is unable to be retrieved, set the flag as an error 
+flag=3
+
+# Check that the right number of arguments is provided
+# If there are not 3 arguments, or if any of the arguments is -h/--help, then print out the --help command
+if [[ $# != 3 ]] || [[ $* == *"-h"* ]] || [[ $* == *"--help"* ]];
+then
+	# Set the flag to fetch the --help command
+	flag=0
+fi
+
+# The openweathermap API key
+APPID=24358ee068d1f33b66181473b2f04159
+# The format the API should return all information in
+mode=json
+
+# Get the first argument [where]
+where=$1
+# Get the second argument [units]
+units=$2
+# Get the third argument [type]
+typeInfo=$3
+
+# Check if the user has the [where] argument set to "--origin" and "--now"
+if [[ ${where} == "-o"  ]] || [[ ${where} == "--origin" ]];  
+then
+
+	# Fetch the IP address of current device	
+	myIP=$(curl -s "https://ipinfo.io/ip")
+	# Fetch the geographic information of the current IP
+	geoInfo=$(curl -s "https://ipinfo.io/${myIP}/geo")
+	
+	# Fetch the name of the city	
+	city=$(jq '.city' <<< ${geoInfo} | tr -d '"')
+	# Fetch the name of the country
+	country=$(jq '.country' <<< ${geoInfo} | tr -d '"')
+	# Fetch the zip code of the area (This is so that we can get the correct city's weather - 
+	# the US has MANY identically named cities, but zip codes are unique)
+	zip=$(jq '.postal' <<< ${geoInfo} | tr -d '"')
+	
+	# Check if the user has the [type] argument set to "--now":
+	if [[ ${typeInfo} == "-n" ]] || [[ ${typeInfo} == "--now" ]];
+	then
+
+		echo "Currently in ${city}, ${country}"
+
+		# Fetch weather information according to the argument [units]
+		# If the unit is metric (degrees Celsius)
+		if [[ ${units} == "-c" ]] || [[ ${units} == "--celsius" ]];
+		then
+			# Set the units to be metric
+			units=metric
+			# Create the weather URL for the GET request
+			weatherURL="https://api.openweathermap.org/data/2.5/weather?zip=${zip},${country}&units=${units}&mode=${mode}&APPID=${APPID}"
+			# Set the unit ending for visual purposes
+			ending="°C"
+		
+		# If the unit is imperial (degrees Fahrenheit)	
+		elif [[ ${units} == "-f" ]] || [[ ${units} == "--fahrenheit" ]];
+		then
+			# Set the units to be imperial
+			units=imperial
+			# Create the weather URL for the GET request
+			weatherURL="https://api.openweathermap.org/data/2.5/weather?zip=${zip},${country}&units=${units}&mode=${mode}&APPID=${APPID}"
+			# Set the unit ending for visual purposes
+			ending="°F"
+		
+		# If the unit is SI (Kelvin)
+		elif [[ ${units} == "-k" ]] || [[ ${units} == "--kelvin" ]];
+		then
+			# Create the weather URL for the GET request (No need to set the units since Kelvin is the default)
+			weatherURL="https://api.openweathermap.org/data/2.5/weather?zip=${zip},${country}&mode=${mode}&APPID=${APPID}"
+			# Set the unit ending for visual purposes
+			ending=" K"
+		
+		fi
+
+		# Set the flag to fetch all the information set above
+		flag=1
+	
+	# Otherwise, check if  the user has the [type] argument set to "--multiple":
+	elif [[ ${typeInfo} == "-m" ]] || [[ ${typeInfo} == "--multiple" ]];
+	then
+
+		echo "Forecast in ${city}, ${country}"
+	
+		# If the unit is metric (degrees Celsius)
+		if [[ ${units} == "-c" ]] || [[ ${units} == "--celsius" ]];
+		then
+			# Set the units to be metric
+			units=metric
+			# Create the weather URL for the GET request
+			weatherURL="https://api.openweathermap.org/data/2.5/forecast?zip=${zip},${country}&units=${units}&mode=${mode}&APPID=${APPID}"
+			# Set the unit ending for visual purposes
+			ending="°C"
+		
+		# If the unit is imperial (degrees Fahrenheit)
+		elif [[ ${units} == "-f" ]] || [[ ${units} == "--fahrenheit" ]];
+		then
+			# Set the units to be imperial
+			units=imperial
+			# Create the weather URL for the GET request
+			weatherURL="https://api.openweathermap.org/data/2.5/forecast?zip=${zip},${country}&units=${units}&mode=${mode}&APPID=${APPID}"
+			# Set the unit ending for visual purposes
+			ending="°F"
+		
+		# If the unit is SI (Kelvin)
+		elif [[ ${units} == "-k" ]] || [[ ${units} == "--kelvin" ]];
+		then
+
+			# Create the weather URL for the GET request (No need to set the units since Kelvin is the default)
+			weatherURL="https://api.openweathermap.org/data/2.5/forecast?zip=${zip},${country}&mode=${mode}&APPID=${APPID}"
+			# Set the unit ending for visual purposes
+			ending=" K"
+		
+		fi
+		
+		# Set the flag to fetch all the information set above
+		flag=2
+
+	fi
+	
+# Check if the user has the arguments: "city,2-digit country code" and "--now"
+elif [[ ${where} == *","* ]] && [[ ${typeInfo} == "-n" ]] || [[ ${typeInfo} == "--now" ]];
+then
+	
+	echo "Currently in ${where}"
+	
+	# Fetch weather information according to the argument [units]
+	# If the unit is metric (degrees Celsius)
+	if [[ ${units} == "-c" ]] || [[ ${units} == "--celsius" ]];
+	then
+		# Set the units to be metric
+		units=metric
+		# Create the weather URL for the GET request
+		weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${where}&units=${units}&mode=${mode}&APPID=${APPID}"
+		# Set the unit ending for visual purposes
+		ending="°C"
+	
+	# If the unit is imperial (degrees Fahrenheit)
+	elif [[ ${units} == "-f" ]];
+	then
+		# Set the units to be imperial
+		units=imperial
+		# Create the weather URL for the GET request
+		weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${where}&units=${units}&mode=${mode}&APPID=${APPID}"
+		# Set the unit ending for visual purposes
+		ending="°F"
+	
+	# If the unit is SI (Kelvin)
+	elif [[ ${units} == "-k" ]] || [[ ${units} == "--kelvin" ]];
+	then
+
+		# Create the weather URL for the GET request (No need to set the units since Kelvin is the default)
+		weatherURL="https://api.openweathermap.org/data/2.5/weather?q=${where}&mode=${mode}&APPID=${APPID}"
+		# Set the unit ending for visual purposes
+		ending=" K"
+
+	fi
+	
+	# Set the flag to fetch all the information set above
+	flag=1
+
+# Check if the user has the arguments: "city,2-digit country code" and "--multiple"
+elif [[ ${where} == *","* ]] && [[ ${typeInfo} == "-m" ]] || [[ ${typeInfo} == "--multiple" ]];
+then
+	
+	echo "Forecast in ${where}"
+	
+	# If the unit is metric (degrees Celsius)
+	if [[ ${units} == "-c" ]] || [[ ${units} == "--celsius" ]];
+	then
+
+		# Set the units to be metric
+		units=metric
+		# Create the weather URL for the GET request
+		weatherURL="https://api.openweathermap.org/data/2.5/forecast?q=${where}&units=${units}&mode=${mode}&APPID=${APPID}"
+		# Set the unit ending for visual purposes
+		ending="°C"
+	
+	# If the unit is imperial (degrees Fahrenheit)
+	elif [[ ${units} == "-f" ]] || [[ ${units} == "--fahrenheit" ]];
+	then
+		
+		# Set the units to be imperial
+		units=imperial
+		# Create the weather URL for the GET request
+		weatherURL="https://api.openweathermap.org/data/2.5/forecast?q=${where}&units=${units}&mode=${mode}&APPID=${APPID}"
+		# Set the unit ending for visual purposes
+		ending="°F"
+
+	# If the unit is SI (Kelvin)
+	elif [[ ${units} == "-k" ]] || [[ ${units} == "--kelvin" ]];
+	then
+		
+		# Create the weather URL for the GET request (No need to set the units since Kelvin is the default)
+		weatherURL="https://api.openweathermap.org/data/2.5/forecast?q=${where}&mode=${mode}&APPID=${APPID}"
+		# Set the unit ending for visual purposes
+		ending=" K"
+	fi
+
+	# Set the flag to fetch all the information set above
+	flag=2
+
+fi
+
+# FLAG CHECK
+# If the --help has been called for
+if [[ ${flag} -eq 0 ]];
+then
+	echo "Get simple weather details using the command-line"
+	echo
+	echo "usage: clime [where] [unit] [type]"
+	echo ""
+	echo "Options and arguments:"
+	echo ""
+	echo "[where] arguments:"
+	echo "-o, --origin			: Current location"
+	echo "City,2-digit Country Code	: Example - Boston,US (notice no spaces)"
+	echo ""
+	echo "[unit] arguments:"
+	echo "-c, --celsius			: Degrees Celsius (Metric)"
+	echo "-f, --fahrenheit		: Degrees Fahrenheit (Imperial)"
+	echo "-k, --kelvin			: Degrees Kelvin (SI)"
+	echo ""
+	echo "[type] arguments:"
+	echo "-n, --now			: Current weather"
+	echo "-m, --multiple			: Weather forecast in 3-hour intervals for 5-days"	
+	echo ""
+	echo "Any of the arguments can be -h or --help. This will show the above information on how to use clime."
+	echo "The arguments can be left blank too to get the same result."
+	# Exit the script	
+	exit 0
+
+# If the --now argument has been called for
+elif [[ ${flag} -eq 1 ]];
+then
+	# Fetch the weather information
+	weatherInfo=$(curl -s ${weatherURL})
+
+	# Format the returned code and store 
+	returnCode=$(jq '.cod' <<< ${weatherInfo} | tr -d '"')
+	
+	# If the return code is 404 (Not Found)
+	if [[ ${returnCode} -eq 404 ]];
+	then
+		# Get the error message returned in the GET request
+		message=$(jq '.message' <<< ${weatherInfo} | tr -d '"')
+		echo "Error: ${message}"
+
+	else
+
+		# Format the temperature data and store
+		temp=$(jq '.main.temp' <<< ${weatherInfo})
+		# Format the weather description and store
+		descrp=$(jq '.weather[0].description' <<< ${weatherInfo} | tr -d '"')
+	
+		echo "${temp}${ending} | ${descrp}"
+
+	fi
+
+	# Exit the script
+	exit 0
+
+# If the --multiple argument has been called for
+elif [[ ${flag} -eq 2 ]];
+then
+	
+	# Fetch the forecast information
+	forecastStuff=$(curl -s ${weatherURL})
+
+	# Format the returned code and store 
+	returnCode=$(jq '.cod' <<< ${forecastStuff} | tr -d '"')
+	
+	# If the return code is 404 (Not Found)
+	if [[ ${returnCode} -eq 404 ]];
+	then
+		# Get the error message returned in the GET request
+		message=$(jq '.message' <<< ${forecastStuff} | tr -d '"')
+		echo "Error: ${message}"
+
+	else
+
+		# Fetch the date and time information and store it as the "current" date time
+		currDateTime=$(jq '.list[0].dt_txt' <<< ${forecastStuff} | tr -d '"')
+		# Format the string to just get the date
+		currDateTime=${currDateTime:0:10}
+		echo ----------${currDateTime}----------
+		echo
+		
+		# Fetch the forecast list from the forecast information and store it 
+		forecastList=$(jq -c '.list[]' <<< ${forecastStuff})
+		
+		# Fetch the weather data and iterate through all the forecast list objects
+		while read forecastInfo; do
+			#echo ${forecastInfo}
+			# Fetch the date and time information
+			dateTime=$(jq '.dt_txt' <<< ${forecastInfo} | tr -d '"')
+			
+			# If the date does not match with the "current" date
+			if [[ ${currDateTime} != ${dateTime:0:10} ]]; 
+			then
+				# Replace as the new "current" date
+				currDateTime=${dateTime:0:10}
+				# Create a new row with that date
+				echo ----------${currDateTime}----------
+				echo
+			fi
+			
+			# Formate the temperature data and store
+			temp=$(jq '.main.temp' <<< ${forecastInfo})
+			# Formate the weather description and store
+			descrp=$(jq '.weather[0].description' <<< ${forecastInfo} | tr -d '"')
+			
+			echo "${dateTime:11:19} | ${temp}${ending} | ${descrp}"
+			echo
+
+		done <<< ${forecastList}
+
+	fi
+
+	# Exit the script
+	exit 0
+
+# If the error flag (flag=3) is still set, then print out a vague error statement
+# TODO: EXPAND ON THESE ERRORS
+elif [[ ${flag} -eq 3 ]];
+then
+
+	echo "Some error has occured"
+
+	# Exit the script
+	exit 0
+
+fi
